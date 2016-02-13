@@ -5,6 +5,7 @@ var streamify = require('gulp-streamify');
 var autoprefixer = require('gulp-autoprefixer');
 var cssmin = require('gulp-cssmin');
 var less = require('gulp-less');
+var sass = require('gulp-sass');
 var concat = require('gulp-concat');
 var plumber = require('gulp-plumber');
 var source = require('vinyl-source-stream');
@@ -104,6 +105,16 @@ gulp.task('browserify-watch', ['browserify-vendor'], function() {
  | Compile LESS stylesheets.
  |--------------------------------------------------------------------------
  */
+gulp.task('sass', function () {
+  return gulp.src('app/stylesheets/**/*.scss')
+    .pipe(sass().on('error', sass.logError))
+    .pipe(gulp.dest('public/css'));
+});
+
+gulp.task('sass:watch', function () {
+  gulp.watch('app/stylesheets/**/*.scss', ['sass']);
+});
+
 gulp.task('styles', function() {
   return gulp.src('app/stylesheets/main.less')
     .pipe(plumber())
@@ -117,5 +128,5 @@ gulp.task('watch', function() {
   gulp.watch('app/stylesheets/**/*.less', ['styles']);
 });
 
-gulp.task('default', ['styles', 'vendor', 'browserify-watch', 'watch']);
-gulp.task('build', ['styles', 'vendor', 'browserify']);
+gulp.task('default', ['sass', 'styles', 'vendor', 'browserify-watch', 'watch']);
+gulp.task('build', ['sass', 'styles', 'vendor', 'browserify']);

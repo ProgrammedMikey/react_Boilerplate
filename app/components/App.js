@@ -1,13 +1,21 @@
 import React from 'react';
+import AltContainer from 'alt-container';
+import UserStore from '../stores/UserStore'; 
+import Navigation from './Navbar';
 
-class App extends React.Component {
+
+export default class App extends React.Component {
   render() {
     return (
-      <div>
+      <AltContainer stores={{
+        UserStore: UserStore
+        
+      }}>
+        <Navigation />
         {this.props.children}
-      </div>
+      </AltContainer>
     );
   }
 }
 
-export default App;
+App.propTypes = { children: React.PropTypes.object };
